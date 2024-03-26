@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/currency/switch/riorelax_archielite_default_3.html"
+      }
+    ]
+  }
+  
