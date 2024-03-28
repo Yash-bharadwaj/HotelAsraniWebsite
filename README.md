@@ -16,7 +16,7 @@ Name: Yashwanth Bharadwaj
 Website: www.yashwanthbharadwaj.com
 
 Live Demo
-Explore the live website: Hotel Asrani International
+Explore the live website: hotelasraniinternational.com
 
 Feel free to reach out for any inquiries or feedback. Thank you for visiting!
 
