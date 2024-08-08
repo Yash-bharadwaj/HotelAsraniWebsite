@@ -115,6 +115,29 @@
       color: #fff;
       border: 1px solid #fff;
    }
+
+
+   .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 50%;
+            padding-right: 10%;
+            animation: marquee 20s linear infinite;
+            background-color: #2b151592;
+            color: white;
+      
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
 </style>
 </head>
 
@@ -123,6 +146,14 @@
      
      
       <div id="header-sticky" class="menu-area">
+         <div class="marquee">
+         <span class="marquee-text"> Welcome to Asrani International Check-ins are done only after full payment &#x2713; Thank You have a great stay. &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Welcome to Asrani International Check-ins are done only after full payment &#x2713; Thank You have a great stay&nbsp;&nbsp;&nbsp; 
+          
+      
+         </span>
+         
+     </div>
          <div class="container">
             <div class="second-menu">
                <div class="row align-items-center">
