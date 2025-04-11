@@ -925,67 +925,241 @@
     <script src="../../themes/riorelax/js/script.js"></script>
     <script src="../../vendor/core/plugins/language/js/language-public.js"></script>
     <script src="../../vendor/core/plugins/cookie-consent/js/cookie-consent.js"></script>
-   
+    
+    <!-- Popup Booking Form -->
+    <div id="popupBookingForm" class="popup-form">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <div class="popup-header">
+                <h3>Quick Booking</h3>
+                <p>Enter your stay details</p>
+            </div>
+            <form id="quickBookingForm" onsubmit="sendQuickWhatsAppMessage(event)">
+                <div class="form-group">
+                    <label><i class="fal fa-badge-check"></i> Check In Date</label>
+                    <input type="text" id="quick-checkin" class="date-picker" data-date-format="dd-mm-yyyy" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fal fa-times-octagon"></i> Check Out Date</label>
+                    <input type="text" id="quick-checkout" class="date-picker" data-date-format="dd-mm-yyyy" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fal fa-users"></i> Guests</label>
+                    <select id="quick-guests" required>
+                        <option value="1">1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5 Guests</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fal fa-concierge-bell"></i> Room Type</label>
+                    <select id="quick-room" required>
+                        <option value="Standard Rooms">Standard Rooms</option>
+                        <option value="Superior Rooms">Superior Rooms</option>
+                    </select>
+                </div>
+                <button type="submit" class="popup-submit-btn">Book Now</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .popup-form {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            width: 90%;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-content {
+            padding: 20px;
+            position: relative;
+        }
+
+        .close-popup {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            z-index: 1;
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .popup-header h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+
+        .popup-header p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #fff;
+        }
+
+        .popup-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .popup-submit-btn:hover {
+            background: #20ba5a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .popup-form {
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 15px 15px 0 0;
+                margin: 0;
+            }
+
+            .popup-content {
+                padding: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 12px;
+            }
+
+            .popup-header h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
     <script>
-    function sendWhatsAppMessage(event) {
-        event.preventDefault();
-        
-        // Get form values
-        const checkIn = document.getElementById('booking-form-start-date').value;
-        const checkOut = document.getElementById('booking-form-end-date').value;
-        const guests = document.getElementById('adults').value;
-        const room = document.getElementById('room').value;
-        
-        // Create message
-        const message = `Hi, I would like to make a booking enquiry:
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize popup functionality
+            setTimeout(() => {
+                const popup = document.getElementById('popupBookingForm');
+                if (popup) {
+                    popup.style.display = 'block';
+                    hasShownPopup = true;
+                }
+            }, 3000);
+
+            // Close popup when clicking the close button
+            const closeBtn = document.querySelector('.close-popup');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    const popup = document.getElementById('popupBookingForm');
+                    if (popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            }
+
+            // Initialize date pickers
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const formatDate = (date) => {
+                const dd = String(date.getDate()).padStart(2, '0');
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const yyyy = date.getFullYear();
+                return `${dd}-${mm}-${yyyy}`;
+            };
+            
+            const quickCheckIn = document.getElementById('quick-checkin');
+            const quickCheckOut = document.getElementById('quick-checkout');
+            
+            if (quickCheckIn && quickCheckOut) {
+                quickCheckIn.value = formatDate(today);
+                quickCheckOut.value = formatDate(tomorrow);
+                
+                quickCheckIn.addEventListener('change', function() {
+                    const selectedDate = new Date(this.value.split('-').reverse().join('-'));
+                    const nextDay = new Date(selectedDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    
+                    if (new Date(quickCheckOut.value) <= selectedDate) {
+                        quickCheckOut.value = formatDate(nextDay);
+                    }
+                });
+            }
+        });
+
+        function sendQuickWhatsAppMessage(event) {
+            event.preventDefault();
+            
+            const checkIn = document.getElementById('quick-checkin').value;
+            const checkOut = document.getElementById('quick-checkout').value;
+            const guests = document.getElementById('quick-guests').value;
+            const room = document.getElementById('quick-room').value;
+            
+            const message = `Hi, I would like to make a booking enquiry:
 Check-in: ${checkIn}
 Check-out: ${checkOut}
 Number of Guests: ${guests}
 Room Type: ${room}`;
-        
-        // Encode the message for URL
-        const encodedMessage = encodeURIComponent(message);
-        
-        // WhatsApp URL
-        const whatsappURL = `https://wa.me/919908872034?text=${encodedMessage}`;
-        
-        // Open WhatsApp in new tab
-        window.open(whatsappURL, '_blank');
-    }
-
-    // Initialize date pickers with today's date as minimum
-    document.addEventListener('DOMContentLoaded', function() {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        // Format dates
-        const formatDate = (date) => {
-            const dd = String(date.getDate()).padStart(2, '0');
-            const mm = String(date.getMonth() + 1).padStart(2, '0');
-            const yyyy = date.getFullYear();
-            return `${dd}-${mm}-${yyyy}`;
-        };
-        
-        const checkInInput = document.getElementById('booking-form-start-date');
-        const checkOutInput = document.getElementById('booking-form-end-date');
-        
-        // Set minimum dates
-        checkInInput.min = formatDate(today);
-        checkOutInput.min = formatDate(tomorrow);
-        
-        // Update checkout min date when checkin changes
-        checkInInput.addEventListener('change', function() {
-            const selectedDate = new Date(this.value.split('-').reverse().join('-'));
-            const nextDay = new Date(selectedDate);
-            nextDay.setDate(nextDay.getDate() + 1);
-            checkOutInput.min = formatDate(nextDay);
             
-            if (new Date(checkOutInput.value) <= selectedDate) {
-                checkOutInput.value = formatDate(nextDay);
-            }
-        });
-    });
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/919908872034?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+            document.getElementById('popupBookingForm').style.display = 'none';
+        }
     </script>
     
     </body>
