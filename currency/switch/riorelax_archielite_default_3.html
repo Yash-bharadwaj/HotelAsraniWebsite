@@ -1100,7 +1100,7 @@
         });
 
         function sendQuickWhatsAppMessage(event) {
-
+            event.preventDefault();
             
             const checkIn = document.getElementById('quick-checkin').value;
             const checkOut = document.getElementById('quick-checkout').value;
