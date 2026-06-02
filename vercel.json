@@ -3,7 +3,10 @@
       {
         "source": "/",
         "destination": "/currency/switch/riorelax_archielite_default_3.html"
+      },
+      {
+        "source": "/riorelax_archielite_default_3.html",
+        "destination": "/currency/switch/riorelax_archielite_default_3.html"
       }
     ]
   }
-  
