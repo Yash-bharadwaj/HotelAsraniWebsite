@@ -13531,3 +13531,25 @@ td.product-thumbnail img {
     background: var(--primary-color);
     color: #fff
 }
+@media only screen and (max-width: 767px) {
+    .s-slider-content h2 {
+        font-size: 35px !important;
+        line-height: 1.1 !important;
+    }
+}
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+li,
+input,
+textarea,
+button {
+    font-family: "Times New Roman", Times, serif !important;
+}
